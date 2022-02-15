@@ -1,43 +1,74 @@
 package com.study.baekjoon.sort;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Number_11004 {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int n = sc.nextInt();
-        int target = sc.nextInt();
+    static int n,target;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
 
+        n =Integer.parseInt(st.nextToken());
+        target = Integer.parseInt(st.nextToken());
+        int arr[] = new int[n];
 
-        List<Long> arr = new ArrayList<>();
+        st = new StringTokenizer(br.readLine());
+        for(int i=0;i<n;i++) {
+            arr[i] = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < n; i++) {
-            arr.add(sc.nextLong());
         }
-        Collections.sort(arr);
+        quicksort(arr, 0, n-1);
+        System.out.println(arr[target-1]);
+    }
 
-        System.out.println(arr.get(target-1));
+    public static int partition(int[] array, int left, int right) {
+        int mid = (left + right) / 2;
+        swap(array, left, mid); // 중앙 값을 첫 번째 요소로 이동
+
+        int pivot = array[left];
+        int i = left, j = right;
+
+        while (i < j) {
+            while (pivot < array[j]) { // j는 오른쪽에서 왼쪽으로 피봇보다 작거나 같은 값을 찾는다.
+                j--;
+            }
+
+            while (i < j && pivot >= array[i]) { // i는 왼쪽에서 오른쪽으로 피봇보다 큰 값을 찾는다.
+                i++;
+            }
+            swap(array, i, j); // 찾은 i와 j를 교환
+        }
+        // 반복문을 벗어난 경우는 i와 j가 만난경우
+        // 피봇과 교환
+        array[left] = array[i];
+        array[i] = pivot;
+        return i;
+    }
+
+    public static void swap(int[] array, int a, int b) {
+        int temp = array[b];
+        array[b] = array[a];
+        array[a] = temp;
+    }
+
+    public static void quicksort(int[] array, int left, int right) {
+        if (left >= right) {
+            return;
+        }
+
+        int pi = partition(array, left, right);
+
+        // partition과정을 통해 구한 구분점에 +1한 값과 k를 비교하여 해당하는 부분집합에 대해
+        // 재귀호출을 반복한다.
+        if(pi+1 == target) return;
+        else if(pi+1 < target)
+            quicksort(array, pi + 1, right);
+        else
+            quicksort(array, left, pi - 1);
+
     }
 }
-//
-//    이 문제는 대부분 Arrays.sort 로 풀면 시간초과가 난다.
-//
-//        (위는 Java8 기준이다. 참고로 자바의 버전마다 조금씩 다르기 때문에 다른 버전으로 제출하면 통과될 수 있다.)
-//
-//        Arrays.sort() 의 경우 dual-pivot Quicksort 알고리즘을 사용한다고 했다. 물론 평균 시간복잡도가 O(nlogn) 이고 매우 빠른 알고리즘인 것은 맞다. 그러나 최악의 경우 시간복잡도는 O(n2) 이라는 점을 기억해야한다.
-//
-//        이 문제는 단순하게 Arrays.sort() 를 쓰지 못하게 일부러 O(n2) 이 걸리도록 저격한 데이터가 있다.
-//        그래서 아마 Arrays.sort 방법을 써서 제출하다가 틀린 사람이 한 둘이 아니다. (필자의 경우도 저격데이터가 있는지 모르고 제출했다가 틀렸었다... 방심했다..)
-//
-//        일단, 최악의 경우에도 O(nlogn) 을 보장하거나 혹은, O(n) 에 가까운 정렬 알고리즘을 사용해야 한다. 이에 대한 해결 방법은 두 가지가 있다.
-//
-//        첫 번째는 Collections.sort() 를 쓰는 방법이다. Collections.sort() 은 Timsort이다. Timsort 의 경우 합병 및 삽입정렬 알고리즘을 사용한다.
-//        이렇게 두 가지가 섞여있는 정렬 알고리즘을 hybrid sorting algorithm 이라고 하는데, 합병정렬(Merge Sort)의 경우 최선, 최악 모두 O(nlogn)  을 보장하고.
-//        삽입정렬(Insertion sort)의 경우 최선의 경우는 O(n) , 최악의 경우는 O(n2) 이다.
-//        그리고 두 정렬 모두 안정 정렬(stable sort)이기 때문에 Timsort를 hybrid stable sorting algorithm이라고도 한다.
-//
-//        즉, 합병정렬의 최악의 경우와 삽입정렬의 최선의 경우를 짬뽕한 알고리즘이 Timsort 라는 것이다. 실제로 파이썬이나 기타 정렬 알고리즘에서 가장 많이 쓰이는 알고리즘이기도 하다.
-//
-//        시간복잡도 O(n) ~ O(nlogn) 을 보장한다는 장점이 있다. 대신에 Collections.sort()를 사용하고자 한다면 가장 쉬운 방법으로는 일반적인 primitive 배열이 아닌 List 계열(ArrayList, LinkedList 등..)의 자료구조를 사용하여 정렬해야한다.
-
