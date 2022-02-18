@@ -1,38 +1,66 @@
 package com.study.baekjoon.etc;
 
-import java.util.Scanner;
-import java.util.Stack;
+
+import java.io.*;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Number_1406 {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        StringBuilder sb = new StringBuilder();
-        String str = sc.next();
-        int n = sc.nextInt();
-        Stack<Character> stack = new Stack<>();
-        for (int i = 0 ; i < str.length() ; i++) {
-            stack.push(str.charAt(i));
+        String str = br.readLine();
+        int M = Integer.parseInt(br.readLine());
+
+        LinkedList<Character> list = new LinkedList<Character>();
+
+        for(int i = 0; i < str.length(); i++) {
+            list.add(str.charAt(i));
         }
 
-        for (int i = 0 ; i < n ; i++) {
-            String command = sc.next();
-            if (command.equals("P")) {
-                if (stack.empty())
-            } else if (command.equals("L")) {
-                if (stack.empty()) break;
-                stack.push(stack.pop())
-            } else if (command.equals("D")) {
-                if (cursor != str.length()) {
-                    cursor += 1;
-                }
-            } else if (command.equals("B")) {
-                if (cursor != 0) {
-                    str = str.substring(0, cursor - 1) + str.substring(cursor, str.length());
-                    cursor --;
-                }
+        //iterator 메소드 호출
+        ListIterator<Character> iter = list.listIterator();
+        //처음 커서는 문장의 맨 뒤에 있어야하기 때문에 커서를 맨뒤로 이동시켜줌 (ex. abc|)
+        while(iter.hasNext()) {
+            iter.next();
+        }
+
+        for(int i = 0; i < M; i++) {
+            String command = br.readLine();
+            char c = command.charAt(0);
+            switch(c) {
+                case 'L':
+                    if(iter.hasPrevious())
+                        iter.previous();
+
+                    break;
+                case 'D':
+                    if(iter.hasNext())
+                        iter.next();
+
+                    break;
+                case 'B':
+                    //remove()는 next()나 previous()에 의해 반환된 가장 마지막 요소를 리스트에서 제거함
+                    if(iter.hasPrevious()) {
+                        iter.previous();
+                        iter.remove();
+                    }
+                    break;
+                case 'P':
+                    char t = command.charAt(2);
+                    iter.add(t);
+
+                    break;
+                default:
+                    break;
             }
         }
-        System.out.println(str);
+        for(Character chr : list) {
+            bw.write(chr);
+        }
+
+        bw.flush();
+        bw.close();
     }
 }
