@@ -10,10 +10,11 @@ public class Number_21 {
     public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
         ListNode cur = new ListNode();
         ListNode answer = cur;
-        while (!(list1 == null && list2 == null)) {
-            ListNode node;
+        while (!(list1 == null & list2 == null)) {
             int val1 = (list1 != null ? list1.val : 101);
             int val2 = (list2 != null ? list2.val : 101);
+
+            ListNode node;
             if (val1 < val2) {
                 node = new ListNode(list1.val);
                 list1 = list1.next;
