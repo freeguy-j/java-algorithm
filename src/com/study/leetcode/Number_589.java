@@ -7,7 +7,6 @@ import java.util.List;
 
 public class Number_589 {
     public static void main(String[] args) {
-        System.out.println(preorder(root));
     }
 
     public static List<Integer> preorder(Node root) {
